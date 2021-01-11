@@ -18,7 +18,7 @@
         <v-list-item
             ripple
           v-for="item in sideNavItems"
-          :key="item.title"
+          :key="item.link"
           :to="item.link"
         >
           <v-list-item-action>
