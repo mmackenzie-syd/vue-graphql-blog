@@ -1,5 +1,5 @@
 <template>
-  <v-container v-if="getPosts">
+ <!-- <v-container v-if="getPosts">
     <v-flex xs12>
       <v-carousel v-bind="{ 'cycle': true }" interval="3000">
         <v-carousel-item v-for="post in getPosts" :key="post._id" :src="post.imageUrl">
@@ -7,7 +7,7 @@
         </v-carousel-item>
       </v-carousel>
     </v-flex>
-  </v-container>
+  </v-container> -->
 </template>
 
 
@@ -18,21 +18,15 @@ import { gql } from 'apollo-boost';
 
 export default {
   name: 'Home',
-  components: {
+
+  // arrow function does not work in es6 object property methods (at least not with this compiler)
+  // http://es6-features.org/#MethodProperties
+  created: function() {
+    this.handleGetCarouselPosts();
   },
-  apollo: {
-    getPosts: {
-      query: gql`
-        query {
-          getPosts {
-            _id
-            title
-            imageUrl
-            description
-            likes
-          }
-        }
-      `
+  methods: {
+    handleGetCarouselPosts() {
+      this.$store.dispatch('getPosts');
     }
   }
 }
