@@ -9,28 +9,36 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+      posts: []
   },
   mutations: {
-  },
-  actions: {
-      getPosts: () => {
-        apolloClient.query({
-            query: gql`
-                query {
-                    getPosts {
-                        _id
-                        title
-                        imageUrl
-                    }
-                }
-            `
-        }).then(data =>{
-            console.log(data);
-        }).catch(err => {
-            console.error(err);
-        })
+      setPosts: (state, payload) => {
+          state.posts = payload;
       }
   },
+  actions: {
+        getPosts: ({ commit }) => {
+            apolloClient.query({
+            query: gql`
+                query {
+                getPosts {
+                    _id
+                    title
+                    imageUrl
+                }
+            }
+            `
+            }).then(({ data }) => {
+                commit('setPosts', data.getPosts)
+                console.log(data.getPosts);
+            }).catch(err => {
+                console.error(err);
+            })
+        }
+  },
   modules: {
+  },
+  getters: {
+      posts: state => state.posts
   }
 })
