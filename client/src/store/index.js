@@ -8,19 +8,19 @@ import {GET_POSTS, SIGNIN_USER} from "@/store/queries";
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  state: {
-      posts: [],
-      loading: false
-  },
-  mutations: {
-      setPosts: (state, payload) => {
-          state.posts = payload;
-      },
-      setLoading: (state, payload) => {
-          state.loading = payload;
-      }
-  },
-  actions: {
+    state: {
+        posts: [],
+        loading: false
+    },
+    mutations: {
+        setPosts: (state, payload) => {
+            state.posts = payload;
+        },
+        setLoading: (state, payload) => {
+            state.loading = payload;
+        }
+    },
+    actions: {
         getPosts: ({ commit }) => {
             commit('setLoading', true)
             apolloClient.query({
@@ -33,21 +33,23 @@ export default new Vuex.Store({
                 commit('setLoading', false);
             })
         },
-      signinUser: ({ commit}, payload) => {
-          apolloClient.mutate({
-              mutation: SIGNIN_USER,
-              variables: payload
-          }).then(({ data }) => {
-              console.log(data.signinUser);
-          }).catch(err => {
-              console.error(err);
-          })
-      }
-  },
-  modules: {
-  },
-  getters: {
-      posts: state => state.posts,
-      loading: state => state.loading,
-  }
+        signinUser: ({ commit}, payload) => {
+            apolloClient.mutate({
+                mutation: SIGNIN_USER,
+                variables: payload
+            })
+                .then(({data}) => {
+                    console.log(data.signinUser);
+                    localStorage.setItem('token', data.signinUser.token);
+                })
+                .catch(err => {
+                    console.error(err);
+                })
+        }
+    },
+    modules: {},
+    getters: {
+        posts: state => state.posts,
+        loading: state => state.loading,
+    }
 })
