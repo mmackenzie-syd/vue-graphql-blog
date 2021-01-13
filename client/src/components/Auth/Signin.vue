@@ -1,7 +1,29 @@
 <template>
-  <v-container>
-    <h1>Signin</h1>
-  </v-container>
+  <form @submit.prevent="handleSiginUser">
+    <v-text-field
+        v-model="username"
+        label="Name"
+        type="text"
+        required
+    ></v-text-field>
+    <v-text-field
+        v-model="password"
+        label="Password"
+        type="password"
+        required
+    ></v-text-field>
+    <v-btn
+        class="mr-4"
+        type="submit"
+        color="accent"
+    >
+      signin
+    </v-btn>
+    <h3>
+      Don't have an account?
+      <router-link to="/signup">Signup</router-link>
+    </h3>
+  </form>
 </template>
 
 <script>
@@ -10,5 +32,18 @@
 
 export default {
   name: 'Signin',
+  data: {
+    username: '',
+    password: ''
+  },
+  methods: {
+    handleSiginUser() {
+      this.$store.dispatch('signinUser', {
+        username: this.username,
+        password: this.password
+      })
+    }
+  }
 }
+
 </script>
