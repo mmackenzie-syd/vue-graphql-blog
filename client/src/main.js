@@ -43,9 +43,13 @@ const apolloProvider = new VueApollo({ defaultClient })
 Vue.config.productionTip = false
 
 new Vue({
-  provide: apolloProvider.provide(),
-  router,
-  store,
-  vuetify,
-  render: h => h(App)
+    provide: apolloProvider.provide(),
+    router,
+    store,
+    vuetify,
+    render: h => h(App),
+    created: function() {
+        // dose not work if an arrow function is used
+        this.$store.dispatch('getCurrentUser');
+    }
 }).$mount('#app')
