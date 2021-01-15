@@ -28,6 +28,14 @@
             {{item.title}}
           </v-list-item-content>
         </v-list-item>
+        <v-list-item v-if="user" @click="handleSignoutUser">
+          <v-list-item-action>
+            <v-icon>{{'mdi-logout-variant'}}</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            Signout
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
 
@@ -58,15 +66,27 @@
         <v-spacer></v-spacer>
 
         <!-- Horizontal Navbar Links -->
-        <v-toolbar-items class="hidden-xs-only">
+        <v-toolbar-items>
           <v-btn
               text
+              class="hidden-xs-only"
               v-for="item in horizontalNavItems"
               key="item.title"
               :to="item.link"
           >
             <v-icon class="hidden-sm-only" left>{{item.icon}}</v-icon>
             {{item.title}}
+          </v-btn>
+          <v-btn v-if="user" text to="/profile">
+            <v-icon class="hidden-sm-only" left>{{'mdi-account-box'}}</v-icon>
+            <v-badge right color="blue darken-2">
+              <span slot="badge">1</span>
+              Profile
+            </v-badge>
+          </v-btn>
+          <v-btn text v-if="user" @click="handleSignoutUser">
+            <v-icon class="hidden-sm-only" left>{{'mdi-logout-variant'}}</v-icon>
+            Signout
           </v-btn>
         </v-toolbar-items>
 
@@ -99,26 +119,48 @@
 </style>
 
 <script>
+
+import { mapGetters } from 'vuex';
+
+
 export default {
   name: 'App',
   components: {},
   computed: {
+    ...mapGetters(['user']),
     horizontalNavItems() {
-      return [
+      let items = [
         { icon: 'mdi-comment-text', title: 'Posts', link: '/posts' },
         { icon: 'mdi-lock-open', title: 'Sign In', link: '/signin' },
         { icon: 'mdi-pencil', title: 'Sign Up', link: '/signup' },
-      ]
+      ];
+      if (this.user) {
+        items = [
+          { icon: 'mdi-comment-text', title: 'Posts', link: '/posts' }
+        ];
+      }
+      return items;
     },
     sideNavItems() {
-      return [
+      let items = [
         { icon: 'mdi-comment-text', title: 'Posts', link: '/posts' },
         { icon: 'mdi-lock-open', title: 'Sign In', link: '/signin' },
         { icon: 'mdi-pencil', title: 'Sign Up', link: '/signup' },
-      ]
+      ];
+      if (this.user) {
+        items = [
+          { icon: 'mdi-comment-text', title: 'Posts', link: '/posts' },
+          { icon: 'mdi-star-circle', title: 'Create Post', link: '/post/add' },
+          { icon: 'mdi-account-box', title: 'Profile', link: '/profile' }
+        ];
+      }
+      return items;
     }
   },
   methods: {
+    handleSignoutUser() {
+      this.$store.dispatch('signoutUser')
+    },
     toggleSideNav() {
       this.sideNav = !this.sideNav;
     }

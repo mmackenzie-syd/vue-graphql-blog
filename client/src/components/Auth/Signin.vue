@@ -29,12 +29,25 @@
 <script>
 // @ is an alias to /src
 
-
+import { mapGetters } from 'vuex';
 export default {
   name: 'Signin',
   data: {
     username: '',
     password: ''
+  },
+  computed: {
+    user: function() {
+      return this.$store.getters.user;
+    },
+  },
+  watch: {
+    user: function(value) {
+      console.log('value', value)
+      if (value) {
+        this.$router.push("/");
+      }
+    }
   },
   methods: {
     handleSiginUser() {
