@@ -12,7 +12,8 @@ export default new Vuex.Store({
     state: {
         posts: [],
         loading: false,
-        user: null
+        user: null,
+        error: null,
     },
     mutations: {
         setPosts: (state, payload) => {
@@ -26,7 +27,13 @@ export default new Vuex.Store({
         },
         clearUser: (state) => {
             state.user = null;
-        }
+        },
+        setError: (state, payload) => {
+            state.error = payload;
+        },
+        clearError: (state) => {
+            state.error = null;
+        },
     },
     actions: {
         getCurrentUser: ({ commit }) => {
@@ -56,6 +63,7 @@ export default new Vuex.Store({
             })
         },
         signinUser: ({ commit}, payload) => {
+            commit('clearError');
             localStorage.setItem("token", "");
             apolloClient.query({
                 query: SIGNIN_USER,
@@ -66,7 +74,8 @@ export default new Vuex.Store({
                     router.go();
                 })
                 .catch(err => {
-                    console.error(err);
+                    commit('setError', err);
+                    console.log('Signin', err);
                 })
         },
         signoutUser: async ({ commit }) => {
@@ -82,10 +91,11 @@ export default new Vuex.Store({
     modules: {},
     getters: {
         posts: state => state.posts,
-        user: state => {
-            console.log('called')
-            return state.user;
-        },
+        user: state => state.user,
         loading: state => state.loading,
+        error: state => {
+            console.log('err', state)
+            return state.error;
+        }
     }
 })
