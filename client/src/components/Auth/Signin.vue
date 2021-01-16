@@ -1,5 +1,9 @@
 <template>
-  <v-card class="px-5 py-5" color="secondary">
+  <v-card
+      class="px-5 py-5 mx-auto my-12"
+      max-width="550"
+      color="secondary"
+  >
     <h1>Welcome Back</h1>
     <div v-if="error">
       <form-alert :message="error"></form-alert>
