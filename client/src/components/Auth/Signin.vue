@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-card class="px-5 py-5" color="secondary">
     <h1>Welcome Back</h1>
     <div v-if="error">
       <form-alert :message="error"></form-alert>
@@ -25,7 +25,7 @@
           :rules="passwordRules"
       ></v-text-field>
       <v-btn
-          class="mr-4"
+          class="mr-4 mb-4"
           color="accent"
           :loading="loading"
           :disabled="!valid"
@@ -33,13 +33,12 @@
       >
         signin
       </v-btn>
-
       <h3>
         Don't have an account?
         <router-link to="/signup">Signup</router-link>
       </h3>
     </v-form>
-  </div>
+  </v-card>
 </template>
 
 <script>
