@@ -97,6 +97,18 @@
         <transition name="fade">
           <router-view/>
         </transition>
+
+        <v-snackbar
+            v-model="authSnackbar"
+            color="success"
+            bottom
+            left
+            :timeout="5000"
+        >
+          <v-icon class="mr-3">mdi-check-circle</v-icon>
+          <h3>You are now signed in</h3>
+          <v-bar dark flat @click="authSnackbar=false">Close</v-bar>
+        </v-snackbar>
       </v-container>
     </v-main>
   </v-app>
@@ -166,7 +178,15 @@ export default {
     }
   },
   data: () => ({
-    sideNav: false
+    sideNav: false,
+    authSnackbar: false
   }),
+  watch: {
+    user(newValue, oldValue) {
+      if (oldValue === null) {
+        this.authSnackbar = true;
+      }
+    }
+  }
 };
 </script>
