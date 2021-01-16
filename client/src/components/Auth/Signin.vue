@@ -4,9 +4,15 @@
     <div v-if="error">
       <form-alert :message="error"></form-alert>
     </div>
-    <form @submit.prevent="handleSiginUser">
+    <v-form
+        v-model="valid"
+        lazy-validation
+        ref="form"
+        @submit.prevent="handleSiginUser"
+    >
       <v-text-field
           v-model="username"
+          :rules="usernameRules"
           label="Name"
           type="text"
           required
@@ -16,20 +22,22 @@
           label="Password"
           type="password"
           required
+          :rules="passwordRules"
       ></v-text-field>
       <v-btn
           class="mr-4"
-          type="submit"
           color="accent"
           :loading="loading"
+          :disabled="!valid"
       >
         signin
       </v-btn>
+
       <h3>
         Don't have an account?
         <router-link to="/signup">Signup</router-link>
       </h3>
-    </form>
+    </v-form>
   </div>
 </template>
 
@@ -40,9 +48,20 @@ import { mapGetters } from 'vuex';
 
 export default {
   name: 'Signin',
-  data: {
-    username: '',
-    password: ''
+  data: function() {
+      return {
+        username: '',
+        password: '',
+        valid: true,
+        usernameRules: [
+            username => !!username || 'Username is required',
+            username => username.length < 10 || 'Username must have less than ten characters',
+        ],
+        passwordRules: [
+          password => !!password || 'Password is required',
+          password => password.length > 3 || 'Password must have four or more characters',
+        ]
+      }
   },
   computed: {
     ...mapGetters(['error', 'user', 'loading']),
