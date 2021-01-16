@@ -35,7 +35,11 @@ export const defaultClient = new ApolloClient({
 
         if (graphQLErrors) {
             for (let err of graphQLErrors) {
-                console.dir(err);
+                console.log('err', err);
+                if ((err.message === "Invalid Password") || (err.message === "User not found")){
+                    store.commit('setAuthError', err);
+                    store.dispatch('signoutUser');
+                }
             }
         }
     }

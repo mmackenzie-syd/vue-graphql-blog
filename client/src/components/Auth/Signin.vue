@@ -29,6 +29,7 @@
           color="accent"
           :loading="loading"
           :disabled="!valid"
+          type="submit"
       >
         signin
       </v-btn>
