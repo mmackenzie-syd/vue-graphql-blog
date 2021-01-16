@@ -64,17 +64,20 @@ export default new Vuex.Store({
         },
         signinUser: ({ commit}, payload) => {
             commit('clearError');
+            commit('setLoading', true);
             localStorage.setItem("token", "");
             apolloClient.query({
                 query: SIGNIN_USER,
                 variables: payload
             })
                 .then(({data}) => {
+                    commit('setLoading', false);
                     localStorage.setItem('token', data.signinUser.token)
                     router.go();
                 })
                 .catch(err => {
                     commit('setError', err);
+                    commit('setLoading', false);
                     console.log('Signin', err);
                 })
         },
