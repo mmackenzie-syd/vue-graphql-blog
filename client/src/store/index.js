@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 
 import { defaultClient as apolloClient } from '../main';
 
-import {GET_CURRENT_USER, GET_POSTS, SIGNIN_USER, SIGNUP_USER} from "@/store/queries";
+import {ADD_POST, GET_CURRENT_USER, GET_POSTS, SIGNIN_USER, SIGNUP_USER} from "@/store/queries";
 import router from "@/router";
 
 Vue.use(Vuex)
@@ -60,6 +60,18 @@ export default new Vuex.Store({
                 query: GET_POSTS
             }).then(({ data }) => {
                 commit('setPosts', data.getPosts);
+                commit('setLoading', false);
+            }).catch(err => {
+                console.error(err);
+                commit('setLoading', false);
+            })
+        },
+        addPost: ({ commit, payload }) => {
+            commit('setLoading', true)
+            apolloClient.mutate({
+                mutation: ADD_POST,
+                variables: payload,
+            }).then(({ data }) => {
                 commit('setLoading', false);
             }).catch(err => {
                 console.error(err);

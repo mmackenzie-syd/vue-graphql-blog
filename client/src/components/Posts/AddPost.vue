@@ -58,6 +58,8 @@
 // @ is an alias to /src
 
 
+import {mapGetters} from "vuex";
+
 export default {
   name: 'AddPost',
   data() {
@@ -81,6 +83,23 @@ export default {
         desc => !!desc || 'Description is required',
         desc => desc.length < 200 || 'Description must have less than 200 characters',
       ],
+    }
+  },
+  methods: {
+    computed: {
+      ...mapGetters(['user', 'loading'])
+    },
+    handleAddPost() {
+      if (this.$refs.form.validate()) {
+        this.$store.dispatch('addPost', {
+          title: this.title,
+          imageUrl: this.imageUrl,
+          categories: this.categories,
+          description: this.description,
+          creatorId: this.user._id
+        });
+        this.$router.push('/');
+      }
     }
   }
 }
