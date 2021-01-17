@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 
 import { defaultClient as apolloClient } from '../main';
 
-import {GET_CURRENT_USER, GET_POSTS, SIGNIN_USER} from "@/store/queries";
+import {GET_CURRENT_USER, GET_POSTS, SIGNIN_USER, SIGNUP_USER} from "@/store/queries";
 import router from "@/router";
 
 Vue.use(Vuex)
@@ -69,7 +69,6 @@ export default new Vuex.Store({
         signinUser: ({ commit}, payload) => {
             commit('clearError');
             commit('setLoading', true);
-            localStorage.setItem("token", "");
             apolloClient.query({
                 query: SIGNIN_USER,
                 variables: payload
@@ -83,6 +82,23 @@ export default new Vuex.Store({
                     commit('setError', err);
                     commit('setLoading', false);
                     console.log('Signin', err);
+                })
+        },
+        signupUser: ({ commit}, payload) => {
+            commit('clearError');
+            commit('setLoading', true);
+            apolloClient.query({
+                query: SIGNUP_USER,
+                variables: payload
+            })
+                .then(({data}) => {
+                    commit('setLoading', false);
+                    localStorage.setItem('token', data.signupUser.token)
+                    router.go();
+                })
+                .catch(err => {
+                    commit('setError', err);
+                    commit('setLoading', false);
                 })
         },
         signoutUser: async ({ commit }) => {

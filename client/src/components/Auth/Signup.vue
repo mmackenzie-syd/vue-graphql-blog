@@ -29,7 +29,15 @@
       ></v-text-field>
       <v-text-field
           v-model="password"
+          :rules="passwordRules"
           label="Password"
+          type="password"
+          required
+      ></v-text-field>
+      <v-text-field
+          v-model="confirmation"
+          :rules="passwordRules"
+          label="Confirm Password"
           type="password"
           required
       ></v-text-field>
@@ -37,7 +45,7 @@
           class="mr-4 mb-3"
           color="accent"
           :loading="loading"
-          :disabled="!valid"
+          :disabled="!valid || loading"
           type="submit"
       >
         signup
@@ -57,23 +65,44 @@ export default {
     return {
       username: '',
       password: '',
+      confirmation: '',
+      email: '',
       valid: true,
       usernameRules: [
         username => !!username || 'Username is required',
         username => username.length < 10 || 'Username must have less than ten characters',
       ],
+      emailRules: [
+        email => !!email || 'Email is required',
+          email => /.@+./.test(email) || 'Email must be valid'
+      ],
       passwordRules: [
         password => !!password || 'Password is required',
         password => password.length > 3 || 'Password must have four or more characters',
+        confirmation => confirmation === this.password || ' Passwords must match'
       ]
     }
   },
   computed: {
     ...mapGetters(['error', 'loading']),
   },
+  watch: {
+    user: function(value) {
+      console.log('value', value)
+      if (value) {
+        this.$router.push("/");
+      }
+    }
+  },
   methods: {
     handleSigupUser() {
-
+      if (this.$refs.form.validate) {
+        this.$store.dispatch('signupUser', {
+          username: this.username,
+          password: this.password,
+          email: this.email
+        })
+      }
     }
   }
 }

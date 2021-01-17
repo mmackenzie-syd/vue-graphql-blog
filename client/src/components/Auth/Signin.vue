@@ -32,7 +32,7 @@
           class="mr-4 mb-4"
           color="accent"
           :loading="loading"
-          :disabled="!valid"
+          :disabled="!valid || loading"
           type="submit"
       >
         signin
